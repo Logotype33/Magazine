@@ -1,0 +1,26 @@
+﻿@model RegisterViewModel
+
+<div style="width:80%; margin:auto">
+
+
+    <form method="post" asp-controller="Account" asp-action="Register">
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input type="email" class="form-control" asp-for="Email">
+
+        </div>
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label"></label>
+            <input type="password" class="form-control" asp-for="Password">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" asp-for="PasswordConfirm"></label><br />
+            <input class="form-control" asp-for="PasswordConfirm" />
+        </div>
+        <input type="submit" class="btn btn-primary" value="Регистрация" />
+    </form>
+
+
+</div>
+
+

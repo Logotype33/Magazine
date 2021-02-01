@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Order>
+<div class="row row-cols-1 g-4 orders-body">
+
+    @await Html.PartialAsync("../Shared/Partial/OrderDetails.cshtml")
+    <div class="d-flex justify-content-between">
+        @foreach (var ord in Model)
+        {
+
+            <p>Общая цена: @ord.TotalPrice р.</p>
+        }
+
+
+
+        <a class="btn btn-secondary" asp-controller="Admin" asp-action="Orders">Назад</a>
+
+    </div>
+</div>

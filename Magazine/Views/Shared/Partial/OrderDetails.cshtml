@@ -1,0 +1,43 @@
+﻿@model IEnumerable<DataLayer.Models.DbModels.Order>
+@foreach (var ord in Model)
+{
+    <div class="col">
+        <div class="card" style="height:auto">
+            <div class="card-header d-flex justify-content-between bg-white">
+                <div class="text-center">
+                    <p class="card-title">Дата заказа</p>
+                    <p class="card-title">@ord.OrderDate</p>
+                </div>
+                <div class="text-center">
+                    <p class="card-text">Номер заказа</p>
+                    <p class="card-text">@ord.OrderNumber</p>
+                </div>
+                <div class="text-center">
+                    <p class="card-text">Статус заказа</p>
+                    <p class="card-text">@ord.OrderStatus</p>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush">
+                @foreach (var or in ord.Products)
+                {
+                    <li class="list-group-item">
+                        <div class="d-flex  justify-content-between align-items-center">
+                            <img src="@Url.Content(or.Product.Path)" alt="ProductImg">
+                            <div>
+                                <p>Название товара</p>
+                                <p>Цена товара</p>
+                                <p>Количество товара</p>
+                            </div>
+                            <div>
+                                <p>@or.Product.Name</p>
+                                <p>@or.Product.Price</p>
+                                <p>@or.ProductQuantity</p>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+ @*style="background-color: #ffffff;justify-content: space-between;"*@

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Product>
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card  text-center" style="height: 450px">
+                <div class="align-items-center">
+                    <img class="w-auto shopImg" src="@Url.Content(item.Path)" alt="...">
+                    <div class="card-body  align-text-center">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">@item.Price р.</p>
+                    </div>
+
+                    <div class="d-flex justify-content-evenly">
+                        <a asp-action="EditProduct" asp-route-productID="@item.Id" class="btn btn-primary admin-index-btns">Edit</a>
+                        <form method="post">
+                            <input type="submit" class="btn btn-danger admin-index-btns" asp-route-productID="@item.Id" asp-action="DeleteProduct" asp-controller="Admin" value="Delete" />
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        
+    }
+</div>
+
+    <a asp-action="AddProduct" class="btn btn-primary mt-3">Add product</a>

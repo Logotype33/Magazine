@@ -1,0 +1,64 @@
+﻿
+@model IEnumerable<CartLine>
+@if (Model.Count() == 0)
+{
+    <h3>Ваша корзина пуста =(</h3>
+   <a class="btn btn-primary" asp-controller="Shop" asp-action="Index">В каталог</a>
+}
+else
+{
+
+
+@foreach (var pr in Model)
+{
+
+
+
+    <div class="card mb-3" style="width: 80%; margin: auto;">
+        <div class="row g-0 align-items-center text-center">
+            <div class="col-md-4">
+                <img src="@Url.Content(pr.Product.Path)" style="height: 120px; width: auto; margin-top: 15px; margin-bottom: 15px;" alt="...">
+            </div>
+            <div class="col-md-4">
+                <div class="card-body">
+                    <h5 class="card-title">@pr.Product.Name</h5>
+                    <p class="card-text"> @pr.Product.Price р.</p>
+                </div>
+            </div>
+            <div class="col-md-4 ">
+                <div class="d-flex" style="justify-content:center; margin-bottom:10px">
+                    <a asp-action="DecreaseQ" style="text-decoration:none; color:black;" asp-route-productID="@pr.Product.Id"> - </a>
+                    <p>@pr.Quantity</p>
+                    <a asp-action="IncreaseQ" style="text-decoration:none; color:black;" asp-route-productID="@pr.Product.Id"> + </a>
+
+                </div>
+
+                <form method="post">
+                    <button class="btn btn-danger" type="submit" asp-action="RemoveFromCart" asp-route-productID="@pr.Product.Id">Убрать из корзины</button>
+                </form>
+                
+
+            </div>
+        </div>
+    </div>
+
+
+
+}
+<div class="d-flex align-items-center" style="flex-wrap: nowrap; justify-content: space-between;  width: 80%; margin: auto;">
+
+    <h3>@ViewBag.Total р.</h3>
+   
+    <form method="post">
+        <input type="submit" asp-controller="Order" asp-action="CreateOrder" class="btn btn-outline-success" value="Подтвердить заказ" />
+    </form>
+        
+    
+
+</div>
+}
+
+
+
+
+

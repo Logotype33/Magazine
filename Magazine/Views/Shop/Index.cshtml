@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Product>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card align-items-center text-center" style="height: 400px">
+                    <img class="w-auto shopImg" src="@Url.Content(item.Path)" alt="...">
+                    <div class="card-body  align-text-center">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p>@item.Price р.</p>
+                        <form method="post" class="text-right">
+                            <button class="btn btn-success" type="submit" asp-controller="Cart" asp-action="AddToCart" asp-route-productID="@item.Id">Добавить в корзину</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+       

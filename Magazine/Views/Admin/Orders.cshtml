@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Order>
+<div class="row row-cols-1 g-4 orders-body">
+    @foreach (var ord in Model)
+    {
+        <div class="col">
+            <div class="card" style="height:auto">
+                <div class="card-header d-flex bg-white justify-content-between">
+                    <div class="text-center">
+                        <p class="card-title">Дата заказа</p>
+                        <p class="card-title">@ord.OrderDate</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="card-text">Номер заказа</p>
+                        <p class="card-text">@ord.OrderNumber</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="card-text">Статус заказа</p>
+                        <p class="card-text">@ord.OrderStatus</p>
+                    </div>
+                </div>
+                <div class="card-body  align-text-center">
+                    <div class="d-flex" style="justify-content: center">
+                        @foreach (var or in ord.Products)
+                        {   
+                            <img class="w-25" src="@Url.Content(or.Product.Path)" alt="">
+                        }
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <p>Общая цена: @ord.TotalPrice р.</p>
+                    <a class="btn btn-secondary" asp-controller="Admin" asp-action="Details" asp-route-OrderId="@ord.ID">Подробнее</a>
+                    @if (ord.OrderStatus == "Выполняется")
+                    {
+                        <form method="post">
+                            <input class="btn btn-success" asp-controller="Admin" asp-action="ConfirmOrder" asp-route-OrderId="@ord.ID" type="submit" value="Подтвердить выполнение" />
+                        </form>
+                        <form method="post">
+                            <input class="btn btn-danger" asp-controller="Admin" asp-action="CancelOrder" asp-route-OrderId="@ord.ID" type="submit" value="Отменить" />
+                        </form>
+                    }
+
+                </div>
+            </div>
+            </div>
+    }
+    </div>

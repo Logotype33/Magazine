@@ -1,0 +1,8 @@
+﻿@if (User.IsInRole("admin"))
+{
+    Layout = "_LayoutAdmin";
+}
+else
+{
+    Layout = "_Layout";
+}
