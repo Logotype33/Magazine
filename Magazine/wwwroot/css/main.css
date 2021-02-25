@@ -7,7 +7,7 @@
     width:120px;
 }
 .shopImg{
-    max-height:250px;
+    height:200px;
     margin:10px;
 }
 @media(max-width: 1100px) {

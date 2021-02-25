@@ -1,4 +1,5 @@
 ﻿using BL;
+using BL.ProductChanges;
 using DataLayer;
 using DataLayer.Models;
 using DataLayer.Models.DbModels;
@@ -34,19 +35,12 @@ namespace Magazine.Controllers
         [HttpPost]
         public IActionResult AddProduct(Product product, IFormFile uploadedFile)
         {
-            if (uploadedFile != null)
-            {
-                string path = "/Files/" + uploadedFile.FileName;
+            IProductChange change = new CreateProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
+            change.Change();
+            _unit.Product.Create(change.Product);
+            _unit.Save();
+           
 
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.OpenOrCreate))
-                {
-                    uploadedFile.CopyTo(fileStream);
-                }
-                Product prod = new Product { Name = product.Name, Price = product.Price, Path = path };
-                _unit.Product.Create(prod);
-                _unit.Save();
-            }
-            
             return RedirectToAction("Index");
         }
         public IActionResult EditProduct(Guid productID)
@@ -61,18 +55,11 @@ namespace Magazine.Controllers
         [HttpPost]
         public IActionResult EditProduct(Product product, IFormFile uploadedFile)
         {
-            if (uploadedFile != null)
-            {
-                string path = "/Files/" + uploadedFile.FileName;
+            IProductChange change = new EditProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
+            change.Change();
+           
 
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.OpenOrCreate))
-                {
-                    uploadedFile.CopyTo(fileStream);
-                }
-
-                product.Path = path;
-            }
-            _unit.Product.Update(product);
+            _unit.Product.Update(change.Product);
             _unit.Save();
             
             return RedirectToAction("Index");
