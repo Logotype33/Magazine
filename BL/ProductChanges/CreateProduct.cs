@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace BL.ProductChanges
 {
+    /// <summary>
+    /// Класс создания продукта
+    /// </summary>
     public class CreateProduct : ProductChdange
     {
         public CreateProduct(ProductInfo productInfo) : base(productInfo)
@@ -17,6 +20,7 @@ namespace BL.ProductChanges
         public override void Change()
         {
             base.Change();
+            //В продукт записываеся новый экземпляр продукта
             Product = new Product() { Name = Product.Name, Price = Product.Price, Path = Product.Path };
         }
     }

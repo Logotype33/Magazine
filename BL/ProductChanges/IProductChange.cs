@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace BL.ProductChanges
 {
+
     public interface IProductChange
     {
-        public Product Product { get; set; }
+        public Product Product { get; set; }    
         public void Change();
     }
 }

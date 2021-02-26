@@ -18,7 +18,6 @@ namespace Magazine.Controllers
         }
         public IActionResult Index()
         {
-            ViewBag.IsClicked = false;
             return View(_unit.Product.Get()) ;
         }
     }

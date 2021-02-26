@@ -18,7 +18,7 @@ namespace Magazine.Controllers
     {
         private readonly UnitOfWork _unit;
         private readonly IWebHostEnvironment _appEnvironment;
-
+        private IProductChange change;
         public AdminController(UnitOfWork unit, IWebHostEnvironment appEnvironment)
         {
             _unit = unit;
@@ -35,7 +35,7 @@ namespace Magazine.Controllers
         [HttpPost]
         public IActionResult AddProduct(Product product, IFormFile uploadedFile)
         {
-            IProductChange change = new CreateProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
+            change = new CreateProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
             change.Change();
             _unit.Product.Create(change.Product);
             _unit.Save();
@@ -55,7 +55,7 @@ namespace Magazine.Controllers
         [HttpPost]
         public IActionResult EditProduct(Product product, IFormFile uploadedFile)
         {
-            IProductChange change = new EditProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
+            change = new EditProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
             change.Change();
            
 

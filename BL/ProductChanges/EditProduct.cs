@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace BL.ProductChanges
 {
+    /// <summary>
+    /// Класс редактирования продукта
+    /// </summary>
     public class EditProduct:ProductChdange
     {
         public EditProduct(ProductInfo productInfo):base(productInfo)

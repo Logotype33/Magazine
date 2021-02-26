@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace BL.ProductChanges.LoadImg
 {
+    /// <summary>
+    /// Интерфейс загрузки
+    /// </summary>
     public interface ILoad
     {
-       public void Loading(ProductInfo productInfo);
+        /// <summary>
+        /// Метод загрузки
+        /// </summary>
+        /// <param name="productInfo">Получает расширенный продукт</param>
+        public void Loading(ProductInfo productInfo);
     }
 }

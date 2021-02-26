@@ -32,8 +32,7 @@ namespace Magazine.Controllers
            
             return View(_cart.Lines.ToList());
         }
-        //[HttpPost]
-        //public void AddToCart(Guid? productID) => _cart.AddItem(_unit.Product.GetById(productID), 1);
+        
         [HttpPost]
         public IActionResult AddToCart(Guid productID)
         {
