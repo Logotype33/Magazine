@@ -35,9 +35,16 @@ namespace Magazine.Controllers
         [HttpPost]
         public IActionResult AddProduct(Product product, IFormFile uploadedFile)
         {
-            change = new CreateProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
-            change.Change();
-            _unit.Product.Create(change.Product);
+            if (uploadedFile != null)
+            {
+                change = new CreateProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
+                change.Change();
+                _unit.Product.Create(change.Product);
+            }
+            else
+            {
+                _unit.Product.Create(product);
+            }
             _unit.Save();
            
 
@@ -55,11 +62,18 @@ namespace Magazine.Controllers
         [HttpPost]
         public IActionResult EditProduct(Product product, IFormFile uploadedFile)
         {
-            change = new EditProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
-            change.Change();
-           
+            if (uploadedFile != null)
+            {
+                change = new EditProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
+                change.Change();
 
-            _unit.Product.Update(change.Product);
+
+                _unit.Product.Update(change.Product);
+            }
+            else
+            {
+                _unit.Product.Update(product);
+            }
             _unit.Save();
             
             return RedirectToAction("Index");
