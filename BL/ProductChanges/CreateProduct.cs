@@ -21,7 +21,7 @@ namespace BL.ProductChanges
         {
             base.Change();
             //В продукт записываеся новый экземпляр продукта
-            Product = new Product() { Name = Product.Name, Price = Product.Price, Path = Product.Path };
+            Product = new Product() { Name = Product.Name, Price = Product.Price, Path = _productInfo.Path };
         }
     }
 }

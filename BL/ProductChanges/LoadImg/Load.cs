@@ -12,10 +12,7 @@ namespace BL.ProductChanges.LoadImg
     /// </summary>
     public class Load : ILoad
     {
-        /// <summary>
-        /// Метод загрузки, присваивает значение загружаемому файлу расширенного продукта
-        /// </summary>
-        /// <param name="productInfo"></param>
+        
         public void Loading(ProductInfo productInfo)
         {
             using (var fileStream = new FileStream(productInfo.Root + productInfo.Path, FileMode.OpenOrCreate))
