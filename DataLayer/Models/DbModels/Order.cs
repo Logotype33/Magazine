@@ -19,7 +19,7 @@ namespace DataLayer.Models.DbModels
         public decimal TotalPrice { get; set; }
         public DateTime OrderDate { get; set; }
         public int OrderNumber { get; set; }
-        public List<OrderProduct> Products { get; set; }
+        public IEnumerable<OrderProduct> Products { get; set; }
 
         
 

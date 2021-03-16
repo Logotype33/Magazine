@@ -1,4 +1,5 @@
 ﻿using BL;
+using BL.UnitOfWorkFolder;
 using DataLayer;
 using DataLayer.Models;
 using DataLayer.Models.DbModels;
@@ -17,9 +18,9 @@ namespace Magazine.Controllers
     {
         
         private readonly SessionCart _cart;
-        private readonly UnitOfWork _unit;
+        private readonly IUnitOfWork _unit;
         private readonly UserManager<IdentityUser> _userManager;
-        public CartController(UnitOfWork unit, SessionCart cart, UserManager<IdentityUser> userManager)
+        public CartController(IUnitOfWork unit, SessionCart cart, UserManager<IdentityUser> userManager)
         {
             _cart = cart;
             _unit = unit;
@@ -36,25 +37,25 @@ namespace Magazine.Controllers
         [HttpPost]
         public IActionResult AddToCart(Guid productID)
         {
-            _cart.AddItem(_unit.Product.FindById(productID), 1);
+            _cart.AddItem(_unit.GetRepo<Product>().FindById(productID), 1);
             return RedirectToAction("Index","Cart");
         }
 
         public IActionResult IncreaseQ(Guid productID)
         {
-            _cart.Increase(_unit.Product.FindById(productID));
+            _cart.Increase(_unit.GetRepo<Product>().FindById(productID));
             return RedirectToAction("Index");
         }
         public IActionResult DecreaseQ(Guid productID)
         {
-            _cart.Decrease(_unit.Product.FindById(productID));
+            _cart.Decrease(_unit.GetRepo<Product>().FindById(productID));
             return RedirectToAction("Index");
         }
         [HttpPost]
         public IActionResult RemoveFromCart(Guid productID)
         {
             
-            _cart.RemoveLine(_unit.Product.FindById(productID));
+            _cart.RemoveLine(_unit.GetRepo<Product>().FindById(productID));
             return RedirectToAction("Index");
         }
         

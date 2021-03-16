@@ -1,4 +1,7 @@
 ﻿using BL;
+using BL.ItemChanges;
+using BL.ItemChanges.Orders;
+using BL.UnitOfWorkFolder;
 using DataLayer;
 using DataLayer.Models;
 using DataLayer.Models.DbModels;
@@ -20,8 +23,9 @@ namespace Magazine.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SessionCart _cart;
-        private readonly UnitOfWork _unit;
-        public OrderController(UserManager<IdentityUser> userManager, SessionCart cart, UnitOfWork unit)
+        private readonly IUnitOfWork _unit;
+        private IChange<Order> change;
+        public OrderController(UserManager<IdentityUser> userManager, SessionCart cart, IUnitOfWork unit)
         {
             _cart = cart;
             _userManager = userManager;
@@ -33,43 +37,18 @@ namespace Magazine.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-
-
-
                 if (!(_cart.Lines.Count() == 0))
                 {
-                    Order order = new Order()
-
-                    {
-
-                        UserId = Guid.Parse(_userManager.GetUserId(User)),
-                        OrderNumber = _unit.Order.Get().Count() + 1,
-                        OrderDate = DateTime.UtcNow,
-                        OrderStatus = Status.StatusList.Выполняется.ToString(),
-                        TotalPrice = _cart.ComputeTotalValue(),
-                        Products = new List<OrderProduct>()
-                    };
-
-                    foreach (var line in _cart.Lines)
-                    {
-                        order.Products.Add(new OrderProduct()
-                        {
-                            ID = Guid.NewGuid(),
-
-                            ProductID = line.Product.Id,
-                            ProductQuantity = line.Quantity
-                        });
-                    }
-                    _unit.Order.Create(order);
-                    _unit.Save();
+                    var info = new OrderInfo(
+                        Guid.Parse(_userManager.GetUserId(User)),
+                        _unit.GetRepo<Order>().Get().Count() + 1,
+                        _cart);
+                    change = new CreateOrder(info);
+                    change.Change();
+                    _unit.GetRepo<Order>().Create(change.GetT());
+                    _unit.SaveChanges();
                     _cart.Clear();
-
-
-
-
                 }
-
-
                 return RedirectToAction("Index", "Shop");
             }
             else
@@ -81,7 +60,7 @@ namespace Magazine.Controllers
         {
             if (User != null)
             {
-                return View(_unit.Order.OrderThenInclude().Where(x=>x.UserId == Guid.Parse(_userManager.GetUserId(User))));
+                return View(_unit.GetRepo<Order>().OrderThenInclude().Where(x=>x.UserId == Guid.Parse(_userManager.GetUserId(User))));
             }
             else
             {
@@ -90,7 +69,7 @@ namespace Magazine.Controllers
         }
         public IActionResult Details(Guid OrderId)
         {
-            return View(_unit.Order.OrderThenInclude().Where(x=>x.ID==OrderId));
+            return View(_unit.GetRepo<Order>().OrderThenInclude().Where(x=>x.ID==OrderId));
         }
     }
 }

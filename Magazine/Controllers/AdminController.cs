@@ -1,5 +1,6 @@
-﻿using BL;
-using BL.ProductChanges;
+﻿using BL.ItemChanges;
+using BL.ItemChanges.Products;
+using BL.UnitOfWorkFolder;
 using DataLayer;
 using DataLayer.Models;
 using DataLayer.Models.DbModels;
@@ -16,17 +17,20 @@ namespace Magazine.Controllers
     [Authorize(Roles = "admin")]
     public class AdminController:Controller
     {
-        private readonly UnitOfWork _unit;
+        private readonly IUnitOfWork _unit;
+        
+
         private readonly IWebHostEnvironment _appEnvironment;
-        private IProductChange change;
-        public AdminController(UnitOfWork unit, IWebHostEnvironment appEnvironment)
+        private IChange<Product> change;
+        public AdminController(IUnitOfWork unit, IWebHostEnvironment appEnvironment)
         {
             _unit = unit;
+           
             _appEnvironment = appEnvironment;
         }
         public IActionResult Index()
         {
-            return View(_unit.Product.Get());
+            return View(_unit.GetRepo<Product>().Get());
         }
         public IActionResult AddProduct()
         {
@@ -39,13 +43,13 @@ namespace Magazine.Controllers
             {
                 change = new CreateProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
                 change.Change();
-                _unit.Product.Create(change.Product);
+                _unit.GetRepo<Product>().Create(change.GetT());
             }
             else
             {
-                _unit.Product.Create(product);
+                _unit.GetRepo<Product>().Create(product);
             }
-            _unit.Save();
+            _unit.SaveChanges();
            
 
             return RedirectToAction("Index");
@@ -54,7 +58,7 @@ namespace Magazine.Controllers
         {
             if (productID != null)
             {
-                Product product = _unit.Product.FindById(productID);
+                Product product = _unit.GetRepo<Product>().FindById(productID);
                 return View(product);
             }
             return NotFound();
@@ -67,56 +71,56 @@ namespace Magazine.Controllers
                 change = new EditProduct(new ProductInfo(product, uploadedFile, _appEnvironment.WebRootPath));
                 change.Change();
 
-
-                _unit.Product.Update(change.Product);
+                
+                _unit.GetRepo<Product>().Update(change.GetT());
             }
             else
             {
-                _unit.Product.Update(product);
+                _unit.GetRepo<Product>().Update(product);
             }
-            _unit.Save();
+            _unit.SaveChanges();
             
             return RedirectToAction("Index");
         }
         public IActionResult Orders()
         {
             
-            return View(_unit.Order.OrderThenInclude());
+            return View(_unit.GetRepo<Order>().OrderThenInclude());
 
         }
         public IActionResult Details(Guid OrderId)
         {
-            return View(_unit.Order.OrderThenInclude().Where(x => x.ID == OrderId));
+            return View(_unit.GetRepo<Order>().OrderThenInclude().Where(x => x.ID == OrderId));
         }
         [HttpPost]
         public IActionResult CancelOrder(Guid OrderId)
         {
-            var order = _unit.Order.FindById(OrderId);
+            var order = _unit.GetRepo<Order>().FindById(OrderId);
 
             order.OrderStatus = Status.StatusList.Отменён.ToString();
-            _unit.Order.Update(order);
-            _unit.Save();
+            _unit.GetRepo<Order>().Update(order);
+            _unit.SaveChanges();
             return RedirectToAction("Orders", "Admin");
         }
         [HttpPost]
         public IActionResult ConfirmOrder(Guid OrderId)
         {
-            var order = _unit.Order.FindById(OrderId);
+            var order = _unit.GetRepo<Order>().FindById(OrderId);
 
             order.OrderStatus = Status.StatusList.Выполнен.ToString();
-            _unit.Order.Update(order);
-            _unit.Save();
+            _unit.GetRepo<Order>().Update(order);
+            _unit.SaveChanges();
             return RedirectToAction("Orders", "Admin");
 
         }
         [HttpPost]
         public  IActionResult DeleteProduct(Guid productID)
         {
-            Product product = _unit.Product.FindById(productID);
+            Product product = _unit.GetRepo<Product>().FindById(productID);
             if (product != null)
             {
-                _unit.Product.Remove(product);
-                _unit.Save();
+                _unit.GetRepo<Product>().Remove(product);
+                _unit.SaveChanges();
                 return RedirectToAction("Index");
 
             }

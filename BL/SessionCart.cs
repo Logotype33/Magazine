@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace BL
 {
     public class SessionCart
-    {
+	{
 		private readonly List<CartLine> _lineCollection;
 		public SessionCart()
 		{

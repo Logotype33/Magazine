@@ -1,5 +1,6 @@
 using BL;
 using BL.Repo;
+using BL.UnitOfWorkFolder;
 using DataLayer.Models.DbModels;
 using DataLayer.Models.Identity;
 using DataLayer.Repo;
@@ -38,7 +39,7 @@ namespace Magazine
             services.AddScoped<SessionCart>(opt => SessionCart.GetCart(opt));
             services.AddTransient<IRepo<Product>, EFGenericRepository<Product>>();
             services.AddTransient<IRepo<Order>, EFGenericRepository<Order>>();
-            services.AddScoped<UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddMemoryCache();
             services.AddSession();
